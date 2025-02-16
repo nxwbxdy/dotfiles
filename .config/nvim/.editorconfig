@@ -1,3 +1,12 @@
 [*.lua]
+# Standard EditorConfig properties
+max_line_length = 120
 indent_style = space
 indent_size = 2
+end_of_line = lf
+
+# Non-standard properties (specific to some Lua formatters like StyLua)
+# These need to be supported by your formatter/linter
+quote_style = "AutoPreferSingle"
+call_parentheses = "Always"
+collapse_simple_statement = "Always"

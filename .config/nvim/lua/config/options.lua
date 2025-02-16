@@ -3,7 +3,8 @@ vim.o.nu = true
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣', multispace = '·' }
 vim.cmd.colorscheme "catppuccin"
-vim.o.splitright=true
+vim.o.splitright = true
+vim.o.cmdheight = 1
 
 -- move help pages to the right
 vim.api.nvim_create_autocmd("BufWinEnter", {

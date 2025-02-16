@@ -101,3 +101,5 @@ export PATH="$PATH:/home/l466l/.local/bin"
 if [ -f ~/.mybashrc.sh ]; then
     . ~/.mybashrc.sh
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

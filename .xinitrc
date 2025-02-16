@@ -1,3 +1,4 @@
+#!/bin/sh
 xset s 180 &
 xss-lock slock &
 #dwmstatus 2>&1 >/dev/null &
@@ -6,4 +7,6 @@ dunst &
 pactl set-sink-mute 0 true &
 sh ~/builds/status/status.sh &
 export _JAVA_AWT_WM_NONREPARENTING=1
+export PATH="$PATH:$HOME/.local/bin"
+xrdb -merge ~/.Xresources
 exec dwm

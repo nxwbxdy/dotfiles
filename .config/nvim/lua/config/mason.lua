@@ -13,8 +13,7 @@ M.setup = function()
     "clangd",       -- C/C++
     "basedpyright", -- Python
     --"tsserver",     -- TypeScript/JavaScript
-    "html",     -- HTML
-    "cssls",    -- CSS
+    --"cssls",        -- CSS
   }
 
   -- Automatically install servers
@@ -29,9 +28,26 @@ M.setup = function()
       local lspconfig = require("lspconfig")
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-      lspconfig[server_name].setup {
-        capabilities = capabilities,
-      }
+      if server_name == "basedpyright" then
+        lspconfig[server_name].setup {
+          capabilities = capabilities,
+          settings = {
+            basedpyright = {
+              analysis = {
+                inlayHints = {
+                  genericTypes = true,
+                  variableTypes = true,
+                  functionReturnTypes = true
+                }
+              }
+            }
+          }
+        }
+      else
+        lspconfig[server_name].setup {
+          capabilities = capabilities,
+        }
+      end
     end,
   })
 end

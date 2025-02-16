@@ -1,0 +1,9 @@
+#! /usr/bin/env sh
+
+[ "$#" -ne 1 ] && exit 1
+
+query_result=$(curl -s -X GET "https://www.apicountries.com/callingcode/$1")
+
+name=$(echo "$query_result" | jq -r '.[].name')
+
+echo "$name"

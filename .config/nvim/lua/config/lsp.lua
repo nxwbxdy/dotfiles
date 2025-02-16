@@ -18,12 +18,20 @@ M.setup = function()
   -- lspconfig.basedpyright.setup {
   --   capabilities = capabilities
   -- }
+  --
+  local lspconfig = require('lspconfig')
+  lspconfig.superhtml.setup {
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
+    filetypes = { 'superhtml' }
+  }
 
   -- Set up LSP-specific keymaps and autocmds
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       if not client then return end
+
+      vim.lsp.inlay_hint.enable(true)
 
       -- Add keymap for formatting if the client supports it
       if client:supports_method("textDocument/formatting") then
@@ -41,6 +49,14 @@ M.setup = function()
       end
 
       -- Language specific
+      -- -- Add this at the top of the file:
+      -- local inlay_hint_highlight = vim.api.nvim_create_augroup("InlayHintHighlight", {})
+      --
+      -- -- Inside the LspAttach autocmd callback:
+      -- if client.name == "basedpyright" then
+      --   -- Enable inlay hints for Python buffers
+      -- vim.lsp.inlay_hint.enable(true)
+      -- end
 
       -- Python-specific keybinds
       if vim.bo[args.buf].filetype == "python" then
@@ -57,6 +73,14 @@ M.setup = function()
         -- -- Jupyter cell execution (if using jupyter-repl)
         -- vim.keymap.set("n", "<leader>jc", "o# %%<Esc>",
         --   { buffer = args.buf, desc = "Insert Jupyter cell" })
+      end
+
+      if vim.bo[args.buf].filetype == "sh" then
+        -- Run current file
+        vim.keymap.set("n", "<leader>r", function()
+          vim.cmd("w")
+          vim.cmd("vs | terminal ./%")
+        end, { buffer = args.buf, desc = "Run Bash file" })
       end
     end,
   })

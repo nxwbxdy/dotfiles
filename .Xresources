@@ -85,3 +85,7 @@ URxvt.pasteCommand: xclip -o -selection clipboard
 URxvt.urlLauncher: firefox
 URxvt.underlineURLs: true
 URxvt.urlButton: 1
+
+!! cursor
+Xcursor.theme: Adwaita
+Xcursor.size: 16
