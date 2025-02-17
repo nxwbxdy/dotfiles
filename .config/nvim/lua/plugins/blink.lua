@@ -1,7 +1,12 @@
 return {
   {
     'saghen/blink.cmp',
-    dependencies = 'rafamadriz/friendly-snippets',
+    dependencies =
+    {
+      'echasnovski/mini.snippets',
+      'echasnovski/mini.icons',
+      'Kaiser-Yang/blink-cmp-git'
+    },
 
     version = '*',
 
@@ -13,8 +18,8 @@ return {
       -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
       -- See the full "keymap" documentation for information on defining your own keymap.
       keymap = {
-        preset = 'none',
-        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+        preset = 'default',
+        ['<C-g>'] = { 'show' },
         ['<C-e>'] = { 'hide' },
         -- ['<C-y>'] = { 'select_and_accept' },
         ['<C-y>'] = { 'accept' },
@@ -29,6 +34,14 @@ return {
         ['<C-h>'] = { 'snippet_backward', 'fallback' },
 
         ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
+        ['<C-j>'] = { 'show_documentation', 'hide_documentation' }
+      },
+
+      cmdline = {
+        keymap = {
+          preset = 'default',
+          ['<CR>'] = { 'accept_and_enter', 'fallback' }
+        }
       },
 
       appearance = {
@@ -38,14 +51,42 @@ return {
       },
 
       completion = {
-        list = { selection = { preselect = true, auto_insert = false } },
-        ghost_text = { 
-          enabled = true,
-          show_with_selection = true,
-          show_without_selection = true
+        documentation = {
+          auto_show = false,
+          window = {
+            border = 'double',
+            desired_min_height = 10,
+            desired_min_width = 10,
+            min_width = 20,
+            scrollbar = true,
+          }
         },
+        list = { selection = { preselect = true, auto_insert = false } },
+        -- ghost_text = {
+        --   enabled = true,
+        --   show_with_selection = true,
+        --   show_without_selection = true
+        -- },
         menu = {
-          draw = { columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 2 } } }
+          enabled = true,
+          direction_priority = { "n", "s" },
+          draw = {
+            components = {
+              kind_icon = {
+                ellipsis = true,
+                text = function(ctx)
+                  local kind_icon, _, _ = require('mini.icons').get('lsp', ctx.kind)
+                  return kind_icon
+                end,
+                -- Optionally, you may also use the highlights from mini.icons
+                highlight = function(ctx)
+                  local _, hl, _ = require('mini.icons').get('lsp', ctx.kind)
+                  return hl
+                end,
+              }
+            },
+            columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 2 } }
+          }
         },
         accept = {
           create_undo_point = true,
@@ -56,11 +97,34 @@ return {
         }
       },
 
-      signature = { enabled = true },
+
+      signature = {
+        enabled = true,
+        window = {
+          show_documentation = true
+        }
+      },
+
+      snippets = { preset = 'mini_snippets' },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'git', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          git = {
+            module = 'blink-cmp-git',
+            name = 'Git',
+            enabled = function()
+              return vim.tbl_contains({ 'octo', 'gitcommit', 'markdown' }, vim.bo.filetype)
+            end,
+            opts = {
+              commit = {
+                triggers = { '#', ':' }
+              }
+            }
+          }
+        }
       },
+
     },
     opts_extend = { "sources.default" }
   }

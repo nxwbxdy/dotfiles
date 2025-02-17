@@ -14,8 +14,5 @@ return {
         },
       },
     },
-    config = function()
-      require("config.lsp").setup()
-    end,
   },
 }

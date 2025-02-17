@@ -2,26 +2,29 @@ local M = {}
 
 -- Set up LSP servers and capabilities
 M.setup = function()
-  -- local lspconfig = require("lspconfig")
-  -- local capabilities = require("blink.cmp").get_lsp_capabilities()
+  local lspconfig = require("lspconfig")
+  local capabilities = require("blink.cmp").get_lsp_capabilities()
   --
-  -- -- Configure Lua LSP
-  -- lspconfig.lua_ls.setup {
-  --   capabilities = capabilities,
-  -- }
-  --
-  -- -- Configure Clangd
-  -- lspconfig.clangd.setup {
-  --   capabilities = capabilities,
-  -- }
-  --
-  -- lspconfig.basedpyright.setup {
-  --   capabilities = capabilities
-  -- }
-  --
-  local lspconfig = require('lspconfig')
+  -- Configure Lua LSP
+  lspconfig.lua_ls.setup {
+    capabilities = capabilities,
+  }
+
+  -- Configure Clangd
+  lspconfig.clangd.setup {
+    capabilities = capabilities,
+  }
+
+  lspconfig.basedpyright.setup {
+    capabilities = capabilities
+  }
+
+  lspconfig.rust_analyzer.setup{
+    capabilities = capabilities
+  }
+
   lspconfig.superhtml.setup {
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
+    capabilities = capabilities,
     filetypes = { 'superhtml' }
   }
 
