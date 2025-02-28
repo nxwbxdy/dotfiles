@@ -24,7 +24,6 @@ export NNN_PLUG='f:finder;o:fzopen;p:mocplay;d:diffs;t:nmount;v:imgview;a:-!ani-
 # 	fi
 # }
 
-
 if [[ -f "$HOME/.ps1.sh" ]]; then
 	. "$HOME/.ps1.sh"
 fi
@@ -40,13 +39,13 @@ fi
 #     pwd >> "$HOME/.predir"
 #     # Use Perl to remove duplicate entries while maintaining the order
 #     perl -e '
-#         my $file = shift; 
-#         open my $fh, "<", $file or die "Cannot open $file: $!"; 
-#         my @lines = <$fh>; 
-#         close $fh; 
-#         open my $out, ">", $file or die "Cannot write to $file: $!"; 
-#         my %seen; 
-#         print $out reverse grep { !$seen{$_}++ } reverse @lines; 
+#         my $file = shift;
+#         open my $fh, "<", $file or die "Cannot open $file: $!";
+#         my @lines = <$fh>;
+#         close $fh;
+#         open my $out, ">", $file or die "Cannot write to $file: $!";
+#         my %seen;
+#         print $out reverse grep { !$seen{$_}++ } reverse @lines;
 #         close $out;
 #     ' "$HOME/.predir"
 # }
@@ -74,107 +73,108 @@ alias sshdns="ssh nws3-dnssec.sin-lab.at"
 alias ftk=". /home/l466l/Documents/FHH/SEM3/FTK/ftkv/bin/activate"
 
 py() {
-  local filename="${1%.py}.py"
+	local filename="${1%.py}.py"
 
-  # Check if filename is provided
-  if [[ -z "$filename" ]]; then
-    echo "Error: No filename provided."
-    return 1
-  fi
+	# Check if filename is provided
+	if [[ -z "$filename" ]]; then
+		echo "Error: No filename provided."
+		return 1
+	fi
 
-  # Create the file
-  touch "${filename}"
-  if [[ $? -ne 0 ]]; then
-    echo "Error: Could not create file $filename."
-    return 1
-  fi
+	# Create the file
 
-  # Change permissions
-  chmod +x "$filename"
-  if [[ $? -ne 0 ]]; then
-    echo "Error: Could not change permissions on $filename."
-    return 1
-  fi
+	if [[ $(touch "${filename}") -ne 0 ]]; then
+		echo "Error: Could not create file $filename."
+		return 1
+	fi
 
-  # Write content to the file
-  echo -ne "#! /usr/bin/env python\n\n" > "$filename"
-  if [[ $? -ne 0 ]]; then
-    echo "Error: Could not write to $filename."
-    return 1
-  fi
+	# Change permissions
 
-  echo "Python file '$filename' created!"
-  return 0
+	if [[ $(chmod +x "$filename") -ne 0 ]]; then
+		echo "Error: Could not change permissions on $filename."
+		return 1
+	fi
+
+	# Write content to the file
+	echo -ne "#! /usr/bin/env python\n\n" >"$filename"
+	if [[ $? -ne 0 ]]; then
+		echo "Error: Could not write to $filename."
+		return 1
+	fi
+
+	echo "Python file '$filename' created!"
+	return 0
 }
 
 #NG!pE@rE8dEGjUXhfuLWXF4v^E@
-PATH="$PATH:$HOME/.scripts/screenshot/"
-PATH="$PATH:$HOME/.scripts/pdf/"
-PATH="$PATH:$HOME/go/bin/"
+# PATH="$PATH:$HOME/.scripts/screenshot/"
+# PATH="$PATH:$HOME/.scripts/pdf/"
+# PATH="$PATH:$HOME/.scripts/notify/"
+# PATH="$PATH:$HOME/go/bin/"
 
-function svol () {
+function svol() {
 	wpctl set-volume @DEFAULT_AUDIO_SINK@ "${1}%"
 }
 
-function ivol () {
+function ivol() {
 	wpctl set-volume @DEFAULT_AUDIO_SINK@ "${1}%+"
 }
 
-function dvol () {
+function dvol() {
 	wpctl set-volume @DEFAULT_AUDIO_SINK@ "${1}%-"
 }
 
-function tvol () {
+function tvol() {
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 }
 
-function mvol () {
+function mvol() {
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ 1
 }
 
-function gvol () {
+function gvol() {
 	wpctl get-volume @DEFAULT_AUDIO_SINK@
 }
 
 mcd() {
-    if [ $# -ne 1 ]; then
-        echo "Usage: mcd <directory>"
-        return 1
-    fi
-    mkdir -p "$1" && cd "$1" || return 1
+	if [ $# -ne 1 ]; then
+		echo "Usage: mcd <directory>"
+		return 1
+	fi
+	mkdir -p "$1" && cd "$1" || return 1
 }
 
 mkn() {
-    if [ $# -ne 1 ]; then
-        echo "Usage: mknumdir <filename>"
-        return 1
-    fi
+	local max_num seq_sum
 
-    local filename="$1"
-    local base="${filename%.*}"
-    local ext="${filename##*.}"
+	if [ $# -ne 1 ]; then
+		echo "Usage: mknumdir <filename>"
+		return 1
+	fi
 
-    # Validate filename has an extension
-    if [[ "$base" == "$filename" ]]; then
-        echo "Error: Filename must contain an extension"
-        return 1
-    fi
+	local filename="$1"
+	local base="${filename%.*}"
 
-    # Find highest existing number
-    local max_num=$(find . -maxdepth 1 -type d -name '[0-9][0-9][0-9]_*' -printf '%f\n' | 
-                   awk -F_ '{print $1}' | 
-                   while read -r num; do printf "%d\n" "$((10#$num))"; done | 
-                   sort -nr | 
-                   head -n1)
+	# Validate filename has an extension
+	if [[ "$base" == "$filename" ]]; then
+		echo "Error: Filename must contain an extension"
+		return 1
+	fi
 
+	# Find highest existing number
+	max_num=$(find . -maxdepth 1 -type d -name '[0-9][0-9][0-9]_*' -printf '%f\n' |
+		awk -F_ '{print $1}' |
+		while read -r num; do printf "%d\n" "$((10#$num))"; done |
+		sort -nr |
+		head -n1)
 
-    # Calculate next number
-    local next_num=$(( ${max_num:- -1} + 1 ))  # Handle no existing dirs case
-    local seq_num=$(printf "%03d" "$next_num")
+	# Calculate next number
+	local next_num=$((${max_num:- -1} + 1)) # Handle no existing dirs case
+	seq_num=$(printf "%03d" "$next_num")
 
-    # Create directory and file
-    local dirname="${seq_num}_${base}"
-    mkdir -p "$dirname" && touch "$dirname/$filename" && cd "$dirname" || return 1
+	# Create directory and file
+	local dirname="${seq_num}_${base}"
+	mkdir -p "$dirname" && touch "$dirname/$filename" && cd "$dirname" || return 1
 }
 
 eval "$(ssh-agent -s)" &>/dev/null

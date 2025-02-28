@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -xeo pipefail
+
+TIME=$1
+MESSAGE=$2
+COUNT_IN_SEC=0
+
+if [[ "$TIME" =~ ^[0-9]+$ ]]; then
+	TIME="${TIME}m"
+fi
+
+UNIT="${TIME: -1}"
+VALUE="${TIME::-1}"
+
+if ! [[ "$VALUE" =~ ^[0-9]+$ ]]; then
+	echo "Invalid time format. Use a number followed by m or h (e.g., 5m, 1h)"
+	exit 1
+fi
+
+case "$UNIT" in
+"s")
+	COUNT_IN_SEC=$((VALUE))
+	;;
+"m")
+	COUNT_IN_SEC=$((VALUE * 60))
+	;;
+"h")
+	COUNT_IN_SEC=$((VALUE * 3600))
+	;;
+*)
+	echo "Unrecognized time unit. Use 'm' for minutes or 'h' for hours."
+	exit 1
+	;;
+esac
+
+sleep "$COUNT_IN_SEC"
+notify-send -u critical "<<< food timer >>>" "$MESSAGE"

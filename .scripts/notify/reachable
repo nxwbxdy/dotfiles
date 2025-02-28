@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+if [[ "$#" != 1 ]]; then
+	echo "Please provide url"
+	exit 1
+fi
+
+URL="$1"
+MAX_TIMEOUT=5
+SLEEP_INTERVAL=60
+ONLINE_STATE=true
+
+command echo "Monitoring $URL. Press Ctrl+C to stop..."
+
+notify() {
+	if command -v notify-send >/dev/null 2>&1; then
+		command notify-send --urgency="$1" "SERVER STATUS" "$URL $2"
+	else
+		command echo "GITLAB server ONLINE - $(date)" >&2
+	fi
+}
+
+while :; do
+	if curl -s -L -X GET --max-time "$MAX_TIMEOUT" "$URL" >/dev/null; then
+		if [[ "$ONLINE_STATE" = false ]]; then
+			notify "low" "ONLINE"
+			ONLINE_STATE=true
+		fi
+	else
+		if [[ "$ONLINE_STATE" = true ]]; then
+			notify "critical" "OFFLINE"
+		notify "critical" "OFFLINE"
+		fi
+	fi
+	command sleep "$SLEEP_INTERVAL"
+done

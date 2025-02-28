@@ -52,4 +52,4 @@ M.setup = function()
   })
 end
 
-return M
+M.setup()

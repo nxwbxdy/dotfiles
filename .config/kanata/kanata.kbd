@@ -1,21 +1,17 @@
+(defcfg process-unmapped-keys false)
 (defvar
   tap-timeout   150
   hold-timeout  150
   tt $tap-timeout
   ht $hold-timeout
+  tap-dance-timeout 1000
+  td $tap-dance-timeout
 )
 
 (defalias
   cw  (caps-word 2000)
 )
 
-#|(defsrc
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  @cw  a    s    d    f    g    h    j    k    l    ;    '    ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
-)|#
 (defsrc
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
@@ -24,24 +20,97 @@
   lctl lmet lalt           spc            ralt rmet rctl
 )
 
-
-(deflayer qwerty
+(deflayer devlp
   @grl 1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  @cw  a    s    d    f    g    h    j    k    l    ;    '    ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  tab  q    w    e    r    t    y    @u   i    o    @p   [    ]    \
+  @cw  @a   s    d    f    @g   @h   j    k    l    ;    '    ret
+  lsft z    x    @c   v    b    n    m    ,    .    /    rsft
   lctl lmet lalt           spc            ralt rmet rctl
 )
 
-#|
-(deflayer qwerty_de
-  @grl    1       2       3       4       5       6       7       8       9       0       sharp   acute   backspace
-  tab     q       w       e       r       t       y       u       i       o       p       u_diaeresis plus    enter
-  _       a       s       d       f       g       h       j       k       l       o_diaeresis a_diaeresis number_sign
-  lshift  z       x       c       v       b       n       m       comma   dot     minus   rshift
-  lctrl   lmeta   lalt    space   ralt    rmet   rctrl
+(deflayer qwerty
+  @grl 1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    @cu  i    @co  p    [    ]    \
+  @cw  @ca  @cs  d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           @csp           ralt rmet rctl
 )
-|#
+
+(defalias
+  g (chord git g)
+  c (chord git c)
+  a (chord git a)
+  p (chord git p)
+  u (chord git u)
+  h (chord git h)
+;;  gc (macro g i t spc c o m m i t)
+;;  ga (macro g i t spc a d d)
+;;  gp (macro g i t spc p u s h)
+;;  gu (macro g i t spc p u l l)
+)
+
+(defchords git 70
+  (g) g
+  (h) h
+  (c) c
+  (a) a
+  (p) p
+  (u) u
+;;  (h c) @gc
+;;  (h a) @ga
+;;  (g p) @gp
+;;  (g u) @gu
+)
+
+(defalias
+  ca (chord chords a)
+  co (chord chords o)
+  cu (chord chords u)
+  cs (chord chords s)
+  csp (chord chords spc)
+  uml-a (unicode ä)
+  uml-o (unicode ö)
+  uml-u (unicode ü)
+  uml-s (unicode ß)
+)
+
+(defchords chords 100
+	   (a) a
+	   (o) o
+	   (u) u
+	   (s) s
+	   (spc) spc
+	   (spc a) @uml-a
+	   (spc o) @uml-o
+	   (spc u) @uml-u
+	   (spc s) @uml-s
+   )
+
+
+(defalias
+  ml	( movemouse-left 3 2 )
+  md	( movemouse-down 3 2 )
+  mu	( movemouse-up 3 2 )
+  mr	( movemouse-right 3 2 )
+  mcl	mlft
+  mcm	mmid
+  mcr	mrgt
+  fst	( movemouse-speed 200 )
+  slw	( movemouse-speed 50 )
+  mwl	( mwheel-left 1 1 )
+  mwd	( mwheel-down 1 1 )
+  mwu	( mwheel-up 1 1 )
+  mwr	( mwheel-right 1 1 )
+ )
+
+
+(deflayer mouse
+  @grl _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    @slw @fst _    _    _    _    _    _    _    _    _
+  @cw  _    @mcm @mcr @mcl _    @ml  @md  @mu  @mr  _    _    _
+  _    _    _    @mwu @mwd _    @mwl @mwr _    _    _    _
+  _    _    _              _              _    _    _
+)
 
 (deflayer dvorak
   @grl 1    2    3    4    5    6    7    8    9    0    [    ]    bspc
@@ -64,71 +133,59 @@
 
   ;; tap for capslk, hold for lctl
   ;; cap (tap-hold $tt $ht caps lctl)
+  ms (layer-switch mouse)
+  dev (layer-switch devlp)
 )
 
 
 
 (deflayer layers
-  _    @qwr _    @sql @dvk _    _    _    _    _    _    _    _    _
+  _    @qwr @ms  @dev @dvk _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    @sql _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _              lrld           _    _    _
 )
 
 (defalias
-	sel (tap-hold $tt $ht s (macro S-s S-e S-l S-e S-c S-t))
-	frm (tap-hold $tt $ht f (multi lsft f r o m))
-	whr (tap-hold $tt $ht w (macro S-w S-h S-e S-r S-e))
-	lmt (tap-hold $tt $ht l (macro S-l S-i S-m S-i S-t))
-	grp (tap-hold $tt $ht g (multi lsft g r o u p spc b y))
-	on (tap-hold $tt $ht o (multi lsft o n))
-	jn (tap-hold $tt $ht j (multi lsft j o i n))
+	#|sel	(macro S-(s e l e c t))
+	frm	(macro S-(f r o m))
+	whr	(macro S-(w h e r e))
+	lmt	(macro S-(l i m i t))
+	grp	(macro S-(g r o u p spc b y))
+	on	(macro S-(o n))
+	jn	(macro S-(j o i n))
+	ordb	(macro S-(o r d e r spc b y))
+	hav	(macro S-(h a v i n g))
+	ins	(macro S-(i n s e r t spc i n t o))
+	val	(macro S-(v a l u e s))
+	upd	(macro S-(u p d a t e))
+	st	(macro S-(s e t))
+	del	(macro S-(d e l e t e spc f r o m))
+	ijn	(macro S-(i n n e r spc j o i n))
+	ljn	(macro S-(l e f t spc j o i n))
+	rjn	(macro S-(r i g h t spc j o i n))
+	|#
+
+	#|;; so -> sql o key
+	so	(tap-dance-eager $td (
+				      @ordb
+				      (macro bspc bspc bspc bspc bspc bspc bspc bspc @on) 
+				      (macro bspc bspc)
+				      ))
+	ss	(tap-dance-eager $td (
+				      @sel
+				      (macro bspc bspc bspc bspc bspc bspc)
+				      @st
+				      (macro bspc bspc bspc)
+				      ))
+				      |#
 )
 
 (deflayer sql_layout
   @grl _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    @whr _    _    _    _    _    _    @on  _    _    _    _
-  _    _    @sel _    @frm @grp _    @jn  _    @lmt _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _              _              _    _    _
-)
-
-
-#|(deflayer layers
-  _    @qwr @dvk @ip  _    _    _    _    _    _    _    _    _    lrld
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _              _              _    _    _
 )
-
-;; Define aliases for the macros to type IP addresses and localhost
-(defalias
-: S-;
-1 1
-2 2
-0 0
-7 7
-
-  ;; Macros for typing the required addresses
-  l4  (macro @1 @2 @7 . @0 . @0 . @1)  ;; IPv4 localhost (127.0.0.1)
-  ll  (macro l o c a l h o s t);; General localhost
-  l6  (macro @: @: @1)        ;; IPv6 localhost (::1)
-  
-  ;; Define a prefix alias for 'l' to handle sequences
-  prefix-l (prefix
-            "4" l4
-            "l" ll
-            "6" l6)
-)
-
-;; Define the main QWERTY layer with the prefix key
-(deflayer ip_layout
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  caps a    s    d    f    g    h    j    k    prefix-l  ;    '    ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
-)
-|#
