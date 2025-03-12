@@ -7,6 +7,7 @@ pactl set-sink-mute 0 true &
 sh ~/.scripts/status/status.sh &
 export _JAVA_AWT_WM_NONREPARENTING=1
 xrdb -merge ~/.Xresources
+gammastep -l 48.3:14.28 -t 6500:3600 -m randr &
 
 # # Set PATH for custom scripts BEFORE launching dwm
 # if [ -d "$HOME/bin" ]; then

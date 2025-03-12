@@ -1,0 +1,3 @@
+-- :filter pattern command works for a lot of commands which produce some output. In you case it is
+--
+-- :filter GroupPrefix highlight or you can use any vim search pattern, as example for case insensitive search :filt /\cgroupprefix/ hi

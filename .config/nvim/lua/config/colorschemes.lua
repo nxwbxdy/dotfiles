@@ -21,7 +21,9 @@ end
 
 extend_hl('Comment', { italic = true })
 extend_hl('Normal', { bg = 'none' })
-
+-- extend_hl('netrwDir', { fg = '#4d6ed1' })
+-- extend_hl('netrwDir', { fg = '#ff0000' })
+vim.cmd('highlight netrwDir guifg=#f38ba8')
 
 local blink_cmp_kind_name_highlight = {
   Commit = { default = true, fg = '#a6e3a1' },

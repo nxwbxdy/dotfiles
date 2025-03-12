@@ -97,7 +97,7 @@ return {
       ['<C-l>'] = { 'snippet_forward', 'fallback' },
       ['<C-h>'] = { 'snippet_backward', 'fallback' },
 
-      ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
+      ['<C-i>'] = { 'show_signature', 'hide_signature', 'fallback' },
       ['<C-j>'] = { 'show_documentation', 'hide_documentation' }
     },
 

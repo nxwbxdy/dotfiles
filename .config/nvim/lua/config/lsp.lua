@@ -19,7 +19,8 @@ local keymaps = {
   },
   { "textDocument/implementation", {
     -- ["<leader>gi"] = { vim.lsp.buf.implementation, "goes to implementation" } }
-    ["<leader>gi"] = { tscope_builtin.lsp_implementations, "goes to implementation" } }
+    ["<leader>gi"] = { tscope_builtin.lsp_implementations, "goes to implementation" }
+  }
   },
   { "callHierarchy/incomingCalls", {
     ["<leader>gI"] = { vim.lsp.buf.incoming_calls, "lists incoming calls" } }
@@ -39,6 +40,7 @@ local keymaps = {
 -- Set up LSP servers and capabilities
 M.setup = function()
   local servers = {
+    jdtls = {},
     lua_ls = {},
     clangd = {},
     basedpyright = {

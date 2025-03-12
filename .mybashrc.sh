@@ -1,6 +1,7 @@
 export EDITOR='nvim'
-export VISUAL='nvim'
+# export VISUAL='nvim'
 export PAGER='less'
+export BROWSER='icecat'
 export XDG_CONFIG_HOME="$HOME/.config"
 #export MANPAGER='nvim +Man!'
 export MANPAGER='less'
@@ -70,6 +71,7 @@ fi
 
 alias sshnvas="ssh 87.106.94.178"
 alias sshdns="ssh nws3-dnssec.sin-lab.at"
+# alias sshparrot="ssh lukas@192.168.0.102"
 alias ftk=". /home/l466l/Documents/FHH/SEM3/FTK/ftkv/bin/activate"
 
 py() {
