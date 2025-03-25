@@ -24,7 +24,7 @@ select_resolution() {
 
 # Function to select position
 select_position() {
-	local positions="left-of\nright-of\nabove\nbelow\nprimary"
+	local positions="left-of\nright-of\nabove\nbelow\nprimary\nsame-as"
 	choose_from_list "$positions"
 }
 
