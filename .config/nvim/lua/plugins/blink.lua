@@ -98,7 +98,10 @@ return {
       ['<C-h>'] = { 'snippet_backward', 'fallback' },
 
       ['<C-i>'] = { 'show_signature', 'hide_signature', 'fallback' },
-      ['<C-j>'] = { 'show_documentation', 'hide_documentation' }
+      ['<C-j>'] = { 'show_documentation', 'hide_documentation' },
+
+      ['<Tab>'] = { 'fallback'},
+      ['<S-Tab>'] = { 'fallback'},
     },
 
     appearance = {
