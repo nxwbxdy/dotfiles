@@ -13,7 +13,6 @@ local function mention_configure_score_offset(items)
       items[i].score_offset = bonus_scores[bonus_key]
     end
   end
-
 end
 local function pr_or_issue_configure_score_offset(items)
   -- Bonus to make sure items sorted as below:
@@ -82,7 +81,7 @@ return {
     -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
     -- See the full "keymap" documentation for information on defining your own keymap.
     keymap = {
-      preset = 'default',
+      preset = 'none',
       ['<C-g>'] = { 'show' },
       ['<C-e>'] = { 'hide' },
       -- ['<C-y>'] = { 'select_and_accept' },
@@ -100,8 +99,8 @@ return {
       ['<C-i>'] = { 'show_signature', 'hide_signature', 'fallback' },
       ['<C-j>'] = { 'show_documentation', 'hide_documentation' },
 
-      ['<Tab>'] = { 'fallback'},
-      ['<S-Tab>'] = { 'fallback'},
+      ['<Tab>'] = { 'fallback' },
+      ['<S-Tab>'] = { 'fallback' },
     },
 
     appearance = {
